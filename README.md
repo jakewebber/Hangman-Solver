@@ -2,7 +2,7 @@ Word-Solver
 ==============
 
 Java Swing Word Solver
-
+![Alt text](https://raw.githubusercontent.com/jakewebber/Word-Solver/master/wordSolverScreenshot.png?raw=true "Word Solver")
 <h2>How To Run</h2>
 Download the ZIP file - this includes an executable JAR file, an English dictionary file, and the background image for the GUI. 
 Instructions are provided inside the program. You will need the length of the single word you are trying to solve for. 
