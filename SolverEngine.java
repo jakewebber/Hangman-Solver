@@ -1,10 +1,9 @@
-/*PlayFasterComputerPlayer.java
- * Author: Jake Webber & Matthew Vollkommer
- * Last edited: 3/9/2014
+/*SolverEngine.java
+ * Author: Jake Webber
+ * Last edited: 1/28/2015
  * 
- * 
- * CSCI 1302 UGA SPRING SEMESTER EXTRA CREDIT 
- * Purpose: Generates educated guesses for a hangman game.
+ * Generates letter frequencies for a dictionary file using a
+ * letter parsing algorithm.
  */
 
 
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SolverEngine{
-
 	//Stored possible words of wordLength. Created and added to in the constructor. 
 	//Should be modified every time the method is run, removing words that contain
 	//incorrect letters OR removing words that do not contain correct letters in the correct positions. 
@@ -68,12 +66,10 @@ public class SolverEngine{
 		} catch (FileNotFoundException e) {
 			System.exit(1);
 		}
-		
 		//Adds all dictionary.data entries to ArrayList
 		while(scanner.hasNext()){
 			this.dictionary.add(scanner.next());
 		}
-
 		//Adds all words the same length as wordLength to possibleWords arrayList
 		for(int i = 0; i < this.dictionary.size(); i++){
 			String CurrentWord = (String) this.dictionary.get(i);
@@ -94,43 +90,45 @@ public class SolverEngine{
 	 * 
 	 * @param updatedInString, containing the wordboard of correctly guessed letters 
 	 * and corresponding positions. 
-	 * already_guessed, NOT used, simply added to match abstract class
-	 * SmartAIComputerPlayer's methods.
-	 * @return char
+	 * already_guessed, list of incorrectly guessed characters
+	 * @return the double array with alphabet letter frequencies
 	 */
-	public char generateMove(String updatedInString, String already_guessed){
-		//removing words from PossibleWords...
-		//updatedInString != old InString: Guess was correct, remove words without letter in correct positions
-		if((!(updatedInString.equalsIgnoreCase(InString)))){
-			char[] updatedInStringArray = updatedInString.toCharArray();
-			for(int i = 0; i < this.possibleWords.size(); i++){
-				String CurrentWord = (String) this.possibleWords.get(i);
-				char[] currentWordArray = CurrentWord.toCharArray();
-				//check each word in possibleWords
-				for(int j = 0; j < currentWordArray.length; j++){
-					if(updatedInStringArray[j] != '-'){
-						//if the char at position in currentword doesnt match same char in updatedInString, remove word.
-						if(updatedInStringArray[j] == currentWordArray[j]){
-							continue;
-						}else{
-							this.possibleWords.remove(i);
-							i--; //roll back i, entire ArrayList was shifted to the left. 
-							break;							
-						}
+	public String[][] generateMove(String updatedInString, String incorrectGuesses){
+		//REMOVING WORDS--------------------------------------------------------
+		//remove words that do not contain correct letters in correct positions.
+		char[] updatedInStringArray = updatedInString.toCharArray();
+		for(int i = 0; i < this.possibleWords.size(); i++){
+			String CurrentWord = (String) this.possibleWords.get(i);
+			char[] currentWordArray = CurrentWord.toCharArray();
+			//check each word in possibleWords
+			for(int j = 0; j < currentWordArray.length; j++){
+				if(updatedInStringArray[j] != '-'){
+					//if the char at position in currentword doesnt match same char in updatedInString, remove word.
+					if(updatedInStringArray[j] == currentWordArray[j]){
+						continue;
+					}else{
+						this.possibleWords.remove(i);
+						i--; //roll back i, entire ArrayList was shifted to the left. 
+						break;							
 					}
 				}
 			}
-			//updatedInString = old InString: Guess was incorrect, remove words with that guess.
-		}else if((updatedInString.equalsIgnoreCase(InString))){
-			for(int i = 0; i < this.possibleWords.size(); i++){
-				String CurrentWord = (String) this.possibleWords.get(i);
-				int foundLetter = CurrentWord.indexOf(this.lastGuess);
-				if(foundLetter >= 0){
-					this.possibleWords.remove(i);
-					i--;
+		}
+
+		//Remove words containing characters from incorrectGuesses
+		if(incorrectGuesses != null){
+			for(int j = 0; j < incorrectGuesses.length(); j++){
+				for(int i = 0; i < this.possibleWords.size(); i++){
+					String CurrentWord = (String) this.possibleWords.get(i);
+					int foundLetter = CurrentWord.indexOf(incorrectGuesses.charAt(j));
+					if(foundLetter >= 0){
+						this.possibleWords.remove(i);
+						i--;
+					}
 				}
 			}
 		}
+		//FINISHED REMOVING WORDS--------------------------------------------------------
 		InString = updatedInString; //updating InString, sets up for the next guess.
 		char nextGuess = 0; //the returned char guess being initialized.
 
@@ -202,7 +200,7 @@ public class SolverEngine{
 		//System.out.print("AI Letter: " + nextGuess);
 		//System.out.println("	Frequency: " + highestFrequency);
 		this.lastGuess = nextGuess;
-		return nextGuess;
+		return this.possibleLetters;
 	}
 
 	//----------------------------------------------------------------------------
