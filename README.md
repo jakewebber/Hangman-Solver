@@ -1,7 +1,7 @@
-Hangman-Solver
+Word-Solver
 ==============
 
-Java Swing Hangman Solver GUI
+Java Swing Word Solver
 
 <h2>How To Run</h2>
 Download the ZIP file - this includes an executable JAR file, an English dictionary file, and the background image for the GUI. 
