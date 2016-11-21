@@ -1,8 +1,7 @@
 Word-Solver
 ==============
 
-Java Swing Word Solver. <br>
-Optimized for solving word-based games such as Hangman or Wheel of Fortune.
+Solves for words of a specified length in a given dictionary file based on letter frequencies. Optimized for solving word-based games such as Hangman or Wheel of Fortune.
 ![Alt text](https://raw.githubusercontent.com/jakewebber/Word-Solver/master/wordSolverScreenshot.png?raw=true "Word Solver")
 <h2>How To Run</h2>
 Download the ZIP file - this includes an executable JAR file, an English dictionary file, and the background image for the GUI. 
